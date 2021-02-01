@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{1D5DB9F2-687
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TRMData", "TRMData\TRMData.sqlproj", "{6C27FD7A-742B-48C6-9144-255E768E565F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRM.WPF.UI", "TRM.WPF.UI\TRM.WPF.UI.csproj", "{E7ED685E-556D-4E1F-BA27-90915CA0AC33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{6C27FD7A-742B-48C6-9144-255E768E565F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C27FD7A-742B-48C6-9144-255E768E565F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C27FD7A-742B-48C6-9144-255E768E565F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E7ED685E-556D-4E1F-BA27-90915CA0AC33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7ED685E-556D-4E1F-BA27-90915CA0AC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7ED685E-556D-4E1F-BA27-90915CA0AC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7ED685E-556D-4E1F-BA27-90915CA0AC33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
