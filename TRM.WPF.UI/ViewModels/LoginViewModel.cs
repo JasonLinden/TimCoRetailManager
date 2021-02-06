@@ -4,13 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRM.WPF.UI.Helpers;
 
 namespace TRM.WPF.UI.ViewModels
 {
     public class LoginViewModel : Screen
     {
+        private readonly IAPIHelper _apiHelper;
         private string _userName;
         private string _password;
+
+        public LoginViewModel(IAPIHelper apiHelper)
+        {
+            _apiHelper = apiHelper;
+        }
 
         public string Username
         {
@@ -42,9 +49,17 @@ namespace TRM.WPF.UI.ViewModels
             }
         }
 
-        public void Login()
+        public async Task Login()
         {
-            Console.WriteLine();
+            try
+            {
+                var result = await _apiHelper.AuthenticateAsync(_userName, _password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // throw;
+            }
         }
     }
 }
