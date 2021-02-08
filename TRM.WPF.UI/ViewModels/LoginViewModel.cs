@@ -1,8 +1,5 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TRM.WPF.UI.Helpers;
 
@@ -13,6 +10,7 @@ namespace TRM.WPF.UI.ViewModels
         private readonly IAPIHelper _apiHelper;
         private string _userName;
         private string _password;
+        private string _errorMessage;
 
         public LoginViewModel(IAPIHelper apiHelper)
         {
@@ -41,6 +39,25 @@ namespace TRM.WPF.UI.ViewModels
             }
         }
 
+        public bool IsErrorVisible
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(_errorMessage);
+            }
+        }
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+                NotifyOfPropertyChange(() => IsErrorVisible);
+            }
+        }
+
         public bool CanLogin
         {
             get
@@ -53,12 +70,13 @@ namespace TRM.WPF.UI.ViewModels
         {
             try
             {
+                ErrorMessage = string.Empty;
+
                 var result = await _apiHelper.AuthenticateAsync(_userName, _password);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                // throw;
+                ErrorMessage = ex.Message;
             }
         }
     }
