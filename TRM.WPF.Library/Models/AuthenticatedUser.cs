@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TRM.WPF.UI.Models
+namespace TRM.WPF.Library.Models
 {
     public class AuthenticatedUser
     {

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using TRM.WPF.Library.Api;
+using TRM.WPF.Library.Models;
 using TRM.WPF.UI.Helpers;
 using TRM.WPF.UI.ViewModels;
 
@@ -30,6 +32,7 @@ namespace TRM.WPF.UI
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUser, LoggedInUser>()
                 .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()

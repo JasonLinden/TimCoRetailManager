@@ -1,7 +1,8 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Threading.Tasks;
-using TRM.WPF.UI.Helpers;
+using TRM.WPF.Library.Api;
+using TRM.WPF.Library.Models;
 
 namespace TRM.WPF.UI.ViewModels
 {
@@ -72,7 +73,8 @@ namespace TRM.WPF.UI.ViewModels
             {
                 ErrorMessage = string.Empty;
 
-                var result = await _apiHelper.AuthenticateAsync(_userName, _password);
+                AuthenticatedUser userSession = await _apiHelper.AuthenticateAsync(_userName, _password);
+                await _apiHelper.GetLoggedInUserAsync(userSession.AccessToken);
             }
             catch (Exception ex)
             {

@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using TRM.WPF.UI.Models;
+using TRM.WPF.Library.Models;
 
-namespace TRM.WPF.UI.Helpers
+namespace TRM.WPF.Library.Api
 {
     public interface IAPIHelper
     {
         Task<AuthenticatedUser> AuthenticateAsync(string username, string password);
+        Task GetLoggedInUserAsync(string token);
     }
 }

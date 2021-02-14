@@ -4,17 +4,19 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TRM.WPF.UI.Models;
+using TRM.WPF.Library.Models;
 
-namespace TRM.WPF.UI.Helpers
+namespace TRM.WPF.Library.Api
 {
     public class APIHelper : IAPIHelper
     {
         private HttpClient _apiClient { get; set; }
+        private ILoggedInUser _loggedInUser;
 
-        public APIHelper()
+        public APIHelper(ILoggedInUser loggedInUser)
         {
             InitializeClient();
+            _loggedInUser = loggedInUser;
         }
 
         private void InitializeClient()
@@ -46,6 +48,23 @@ namespace TRM.WPF.UI.Helpers
                     var result = JsonConvert.DeserializeObject<AuthenticatedUser>(await response.Content.ReadAsStringAsync());
 
                     return result;
+                }
+
+                throw new Exception(response.ReasonPhrase);
+            }
+        }
+
+        public async Task GetLoggedInUserAsync(string token)
+        {
+            _apiClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/User"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = JsonConvert.DeserializeObject<LoggedInUser>(await response.Content.ReadAsStringAsync());
+
+                    _loggedInUser = result;
                 }
 
                 throw new Exception(response.ReasonPhrase);

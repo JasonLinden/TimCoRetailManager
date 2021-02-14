@@ -15,7 +15,8 @@ namespace TRMDataManager.Controllers
     [RoutePrefix("api/User")]
     public class UserController : ApiController
     {
-        public List<UserEntity> GetById()
+        [HttpGet]
+        public UserEntity GetById()
         {
             // Get user from token auth
             string userId = RequestContext.Principal.Identity.GetUserId();
@@ -24,7 +25,7 @@ namespace TRMDataManager.Controllers
 
             List<UserEntity> user = userRepository.GetUserById(userId);
 
-            return user;
+            return user.FirstOrDefault();
         }
     }
 }
