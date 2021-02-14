@@ -65,9 +65,9 @@ namespace TRM.WPF.Library.Api
                     var result = JsonConvert.DeserializeObject<LoggedInUser>(await response.Content.ReadAsStringAsync());
 
                     _loggedInUser = result;
-                }
-
-                throw new Exception(response.ReasonPhrase);
+                } 
+                else
+                    throw new Exception(response.ReasonPhrase);
             }
         }
     }

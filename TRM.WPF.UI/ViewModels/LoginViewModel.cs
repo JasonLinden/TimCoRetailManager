@@ -3,18 +3,22 @@ using System;
 using System.Threading.Tasks;
 using TRM.WPF.Library.Api;
 using TRM.WPF.Library.Models;
+using TRM.WPF.UI.EventModels;
 
 namespace TRM.WPF.UI.ViewModels
 {
     public class LoginViewModel : Screen
     {
         private readonly IAPIHelper _apiHelper;
+        private readonly IEventAggregator _events;
+
         private string _userName;
         private string _password;
         private string _errorMessage;
 
-        public LoginViewModel(IAPIHelper apiHelper)
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events)
         {
+            _events = events;
             _apiHelper = apiHelper;
         }
 
@@ -75,6 +79,8 @@ namespace TRM.WPF.UI.ViewModels
 
                 AuthenticatedUser userSession = await _apiHelper.AuthenticateAsync(_userName, _password);
                 await _apiHelper.GetLoggedInUserAsync(userSession.AccessToken);
+
+                _events.PublishOnUIThread(new LoggedInEvent());
             }
             catch (Exception ex)
             {

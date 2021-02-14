@@ -1,21 +1,32 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TRM.WPF.UI.EventModels;
 
 namespace TRM.WPF.UI.ViewModels
 {
     public class ShellViewModel : Conductor<object> // object could be a interface or type which relates to a viewModel for a form
+        , IHandle<LoggedInEvent>
     {
-        private readonly LoginViewModel _loginViewModel;
+        private readonly SalesViewModel _salesViewModel;
+        private readonly IEventAggregator _events;
+        private readonly SimpleContainer _container;
 
-        public ShellViewModel(LoginViewModel loginViewModel)
+        public ShellViewModel( 
+            SalesViewModel salesViewModel,
+            IEventAggregator events,
+            SimpleContainer container)
         {
-            _loginViewModel = loginViewModel;
+            _events = events;
+            _events.Subscribe(this);
+            _container = container;
 
-            ActivateItem(_loginViewModel);
+            _salesViewModel = salesViewModel;
+
+            ActivateItem(_container.GetInstance<LoginViewModel>());
+        }
+
+        public void Handle(LoggedInEvent message)
+        {
+            ActivateItem(_salesViewModel);;
         }
     }
 }
