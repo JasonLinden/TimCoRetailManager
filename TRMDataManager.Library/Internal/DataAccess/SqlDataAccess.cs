@@ -17,6 +17,11 @@ namespace TRMDataManager.Library.Internal.DataAccess
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
 
+        internal List<T> LoadData<T>(string storedProcedure, string connectionStringName)
+        {
+            return LoadData<T>(storedProcedure, null, connectionStringName);
+        }
+
         public List<T> LoadData<T>(string storedProcedure, object parameters, string connectionStringName)
         {
             using (IDbConnection conn = new SqlConnection(GetConnectionString(connectionStringName)))

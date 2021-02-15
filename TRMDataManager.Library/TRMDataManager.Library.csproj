@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\ProductRepository.cs" />
     <Compile Include="DataAccess\UserRepository.cs" />
+    <Compile Include="Models\ProductEntity.cs" />
     <Compile Include="Models\UserEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internal\DataAccess\SqlDataAccess.cs" />
