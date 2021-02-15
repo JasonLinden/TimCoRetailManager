@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using TRM.WPF.Library.Api;
+using TRM.WPF.Library.Api.Interfaces;
 using TRM.WPF.Library.Models;
 using TRM.WPF.UI.Helpers;
 using TRM.WPF.UI.ViewModels;
@@ -27,7 +28,8 @@ namespace TRM.WPF.UI
 
         protected override void Configure()
         {
-            _container.Instance(_container);
+            _container.Instance(_container)
+                .PerRequest<IProductApi, ProductApi>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

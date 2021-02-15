@@ -2,16 +2,31 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using TRM.WPF.Library.Api.Interfaces;
+using TRM.WPF.Library.Models;
 
 namespace TRM.WPF.UI.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        private BindingList<string> _products;
+        private BindingList<ProductModel> _products;
         private BindingList<string> _cart;
         private int _itemQuantity;
+        private readonly IProductApi _productApi;
 
-        public BindingList<string> Products
+        public SalesViewModel(IProductApi productApi)
+        {
+            _productApi = productApi;
+        }
+
+        protected override async void OnInitialize()
+        {
+            Products = new BindingList<ProductModel>(await _productApi.GetAllProducts());
+
+            base.OnInitialize();
+        }
+
+        public BindingList<ProductModel> Products
         {
             get { return _products; }
             set

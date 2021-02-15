@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Threading.Tasks;
-using TRM.WPF.Library.Api;
+using TRM.WPF.Library.Api.Interfaces;
 using TRM.WPF.Library.Models;
 using TRM.WPF.UI.EventModels;
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TRM.WPF.Library.Api.Interfaces;
 using TRM.WPF.Library.Models;
 
 namespace TRM.WPF.Library.Api
@@ -18,6 +19,8 @@ namespace TRM.WPF.Library.Api
             InitializeClient();
             _loggedInUser = loggedInUser;
         }
+
+        public HttpClient ApiClient => _apiClient;
 
         private void InitializeClient()
         {
@@ -56,6 +59,9 @@ namespace TRM.WPF.Library.Api
 
         public async Task GetLoggedInUserAsync(string token)
         {
+            _apiClient.DefaultRequestHeaders.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
 
             using (HttpResponseMessage response = await _apiClient.GetAsync("/api/User"))
