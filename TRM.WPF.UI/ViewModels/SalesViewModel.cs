@@ -172,10 +172,7 @@ namespace TRM.WPF.UI.ViewModels
         {
             decimal subTotal = 0;
 
-            for (int i = 0; i < Cart.Count; i++)
-            {
-                subTotal += Cart[i].Product.RetailPrice * Cart[i].QuantityInCart;
-            }
+            subTotal = Cart.Sum(x => x.Product.RetailPrice * x.QuantityInCart);
 
             return subTotal;
         }
@@ -184,10 +181,7 @@ namespace TRM.WPF.UI.ViewModels
         {
             decimal taxAmount = 0;
 
-            for (int i = 0; i < Cart.Count; i++)
-            {
-                taxAmount += (Cart[i].Product.RetailPrice * Cart[i].QuantityInCart) * (Cart[i].Product.TaxPercent / 100);
-            }
+            taxAmount = Cart.Sum(x => x.Product.RetailPrice * x.QuantityInCart * (x.Product.TaxPercent / 100));
 
             return taxAmount;
         }
