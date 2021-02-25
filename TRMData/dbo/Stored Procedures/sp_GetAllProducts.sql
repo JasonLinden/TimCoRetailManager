@@ -8,6 +8,7 @@ BEGIN
     ,[Description] 
     ,[QuantityInStock] 
     ,[RetailPrice]
+    ,[TaxPercent]
   FROM 
     dbo.[Product]
   ORDER BY 

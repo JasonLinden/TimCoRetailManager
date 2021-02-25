@@ -1,17 +1,20 @@
 ﻿using Caliburn.Micro;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using TRM.WPF.Library.Api.Interfaces;
 using TRM.WPF.Library.Models;
+using TRM.WPF.UI.Models;
 
 namespace TRM.WPF.UI.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        private BindingList<ProductModel> _products;
-        private BindingList<string> _cart;
-        private int _itemQuantity;
+        private ObservableCollection<ProductModel> _products;
+        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+        private ProductModel _selectedProduct;
+        private int _itemQuantity = 1;
         private readonly IProductApi _productApi;
 
         public SalesViewModel(IProductApi productApi)
@@ -21,18 +24,41 @@ namespace TRM.WPF.UI.ViewModels
 
         protected override async void OnInitialize()
         {
-            Products = new BindingList<ProductModel>(await _productApi.GetAllProducts());
+            Products = new ObservableCollection<ProductModel>(await _productApi.GetAllProducts());
 
             base.OnInitialize();
         }
 
-        public BindingList<ProductModel> Products
+        #region Properties
+
+        public ObservableCollection<ProductModel> Products
         {
             get { return _products; }
             set
             {
                 _products = value;
                 NotifyOfPropertyChange(() => Products);
+            }
+        }
+
+        public ProductModel SelectedProduct
+        {
+            get { return _selectedProduct; }
+            set
+            {
+                _selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
+                NotifyOfPropertyChange(() => CanAddToCart);
+            }
+        }
+
+        public BindingList<CartItemModel> Cart
+        {
+            get { return _cart; }
+            set
+            {
+                _cart = value;
+                NotifyOfPropertyChange(() => Cart);
             }
         }
 
@@ -43,20 +69,28 @@ namespace TRM.WPF.UI.ViewModels
             {
                 _itemQuantity = value;
                 NotifyOfPropertyChange(() => ItemQuantity);
-            }
-        }
-
-        public BindingList<string> Cart
-        {
-            get { return _cart; }
-            set
-            {
-                _cart = value;
-                NotifyOfPropertyChange(() => Cart);
+                NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
 
         public bool CanAddToCart
+        {
+            get
+            {
+                return _itemQuantity > 0 && _selectedProduct?.QuantityInStock >= _itemQuantity;
+            }
+        }
+
+        public bool CanCheckout
+        {
+            get
+            {
+                // return !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_password);
+                return false;
+            }
+        }
+
+        public bool CanRemoveFromCart
         {
             get
             {
@@ -69,7 +103,7 @@ namespace TRM.WPF.UI.ViewModels
         {
             get
             {
-                return "$0.00";
+                return CalcSubTotal().ToString("C");
             }
         }
 
@@ -77,7 +111,9 @@ namespace TRM.WPF.UI.ViewModels
         {
             get
             {
-                return "$0.00";
+                decimal total = CalcSubTotal() + CalcTax();
+
+                return total.ToString("C");
             }
         }
 
@@ -85,38 +121,77 @@ namespace TRM.WPF.UI.ViewModels
         {
             get
             {
-                return "$0.00";
+                return CalcTax().ToString("C");
             }
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task AddToCart()
         {
-        }
+            CartItemModel exitingModel = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
-        public bool CanRemoveFromCart
-        {
-            get
+            if (exitingModel != null)
             {
-                // return !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_password);
-                return false;
+                exitingModel.QuantityInCart += _itemQuantity;
+                Cart.ResetBindings();
             }
+            else
+            {
+                CartItemModel newItem = new CartItemModel
+                {
+                    Product = _selectedProduct,
+                    QuantityInCart = _itemQuantity
+                };
+                Cart.Add(newItem);
+            }
+
+            SelectedProduct.QuantityInStock -= ItemQuantity;
+            ItemQuantity = 1;
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => Cart);
         }
 
         public async Task RemoveFromCart()
         {
-        }
-
-        public bool CanCheckout
-        {
-            get
-            {
-                // return !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_password);
-                return false;
-            }
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
         }
 
         public async Task Checkout()
         {
         }
+
+        private decimal CalcSubTotal()
+        {
+            decimal subTotal = 0;
+
+            for (int i = 0; i < Cart.Count; i++)
+            {
+                subTotal += Cart[i].Product.RetailPrice * Cart[i].QuantityInCart;
+            }
+
+            return subTotal;
+        }
+
+        private decimal CalcTax()
+        {
+            decimal taxAmount = 0;
+
+            for (int i = 0; i < Cart.Count; i++)
+            {
+                taxAmount += (Cart[i].Product.RetailPrice * Cart[i].QuantityInCart) * (Cart[i].Product.TaxPercent / 100);
+            }
+
+            return taxAmount;
+        }
+
+        #endregion
     }
 }

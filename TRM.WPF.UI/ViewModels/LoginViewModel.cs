@@ -24,7 +24,9 @@ namespace TRM.WPF.UI.ViewModels
 
         public string Username
         {
-            get { return _userName; }
+            get {
+                return "jasonlinden01@gmail.com"; // _userName; 
+            }
             set
             {
                 _userName = value;
@@ -35,7 +37,8 @@ namespace TRM.WPF.UI.ViewModels
 
         public string Password
         {
-            get { return _password; }
+            get { return "jackson5"; //_password;
+            }
             set
             {
                 _password = value;
@@ -67,7 +70,7 @@ namespace TRM.WPF.UI.ViewModels
         {
             get
             {
-                return !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_password);
+                return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
             }
         }
 
@@ -77,7 +80,7 @@ namespace TRM.WPF.UI.ViewModels
             {
                 ErrorMessage = string.Empty;
 
-                AuthenticatedUser userSession = await _apiHelper.AuthenticateAsync(_userName, _password);
+                AuthenticatedUser userSession = await _apiHelper.AuthenticateAsync(Username, Password);
                 await _apiHelper.GetLoggedInUserAsync(userSession.AccessToken);
 
                 _events.PublishOnUIThread(new LoggedInEvent());

@@ -75,6 +75,7 @@
     <Compile Include="EventModels\Events.cs" />
     <Compile Include="EventModels\LoggedInEvent.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
+    <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -131,9 +132,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\TRM.WPF.Library\TRM.WPF.Library.csproj">
       <Project>{FE210820-75FB-4C55-A251-2B416B7EC717}</Project>

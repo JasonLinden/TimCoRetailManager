@@ -13,5 +13,6 @@ namespace TRM.WPF.Library.Models
         public string Description { get; set; }
         public int QuantityInStock { get; set; }
         public decimal RetailPrice { get; set; }
+        public decimal TaxPercent { get; set; }
     }
 }
